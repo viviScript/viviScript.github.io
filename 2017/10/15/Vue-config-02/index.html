@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="黑胖 欢迎来到我的博客">
+<meta name="description" content="build/webpack.base.conf.js（开发与生产环境基础配置文件）从代码中看到，dev-server使用的webpack配置来自build/webpack.dev.conf.js文件（测试环境下使用的是build/webpack.prod.conf.js，这里暂时不考虑测试环境）。而build/webpack.dev.conf.js中又引用了webpack.base.conf.js">
 <meta name="keywords" content="Vue">
 <meta property="og:type" content="article">
-<meta property="og:title" content="黑胖黑胖黑胖胖">
-<meta property="og:url" content="http://yoursite.com/2017/10/15/Vue-build-config/index.html">
+<meta property="og:title" content="Vue三种环境配置（测试，生产）（自测可用）(教程一)">
+<meta property="og:url" content="http://yoursite.com/2017/10/15/Vue-config-02/index.html">
 <meta property="og:site_name" content="VIVI">
-<meta property="og:description" content="黑胖 欢迎来到我的博客">
+<meta property="og:description" content="build/webpack.base.conf.js（开发与生产环境基础配置文件）从代码中看到，dev-server使用的webpack配置来自build/webpack.dev.conf.js文件（测试环境下使用的是build/webpack.prod.conf.js，这里暂时不考虑测试环境）。而build/webpack.dev.conf.js中又引用了webpack.base.conf.js">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-10-20T07:44:48.706Z">
+<meta property="og:updated_time" content="2017-10-20T10:29:08.768Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="黑胖黑胖黑胖胖">
-<meta name="twitter:description" content="黑胖 欢迎来到我的博客">
+<meta name="twitter:title" content="Vue三种环境配置（测试，生产）（自测可用）(教程一)">
+<meta name="twitter:description" content="build/webpack.base.conf.js（开发与生产环境基础配置文件）从代码中看到，dev-server使用的webpack配置来自build/webpack.dev.conf.js文件（测试环境下使用的是build/webpack.prod.conf.js，这里暂时不考虑测试环境）。而build/webpack.dev.conf.js中又引用了webpack.base.conf.js">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/10/15/Vue-build-config/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/10/15/Vue-config-02/"/>
 
 
 
 
 
-  <title>黑胖黑胖黑胖胖 | VIVI</title>
+  <title>Vue三种环境配置（测试，生产）（自测可用）(教程一) | VIVI</title>
   
 
 
@@ -273,7 +273,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/15/Vue-build-config/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/15/Vue-config-02/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="VIVI">
@@ -290,7 +290,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">黑胖黑胖黑胖胖</h1>
+          <h1 class="post-title" itemprop="name headline">Vue三种环境配置（测试，生产）（自测可用）(教程一)</h1>
         
 
         <div class="post-meta">
@@ -302,7 +302,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-15T11:13:09+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-15T12:13:09+08:00">
                 2017-10-15
               </time>
             
@@ -362,7 +362,20 @@
       
 
       
-        <p>黑胖 欢迎来到我的博客</p>
+        <h2 id="build-webpack-base-conf-js（开发与生产环境基础配置文件）"><a href="#build-webpack-base-conf-js（开发与生产环境基础配置文件）" class="headerlink" title="build/webpack.base.conf.js（开发与生产环境基础配置文件）"></a>build/webpack.base.conf.js（开发与生产环境基础配置文件）</h2><p>从代码中看到，dev-server使用的webpack配置来自build/webpack.dev.conf.js文件（测试环境下使用的是build/webpack.prod.conf.js，这里暂时不考虑测试环境）。而build/webpack.dev.conf.js中又引用了webpack.base.conf.js，所以这里我先分析webpack.base.conf.js。<br>webpack.base.conf.js主要完成了下面这些事情：</p>
+<ul>
+<li>配置webpack编译入口</li>
+<li>配置webpack输出路径和命名规则</li>
+<li>配置模块resolve规则</li>
+<li>配置不同类型模块的处理规则</li>
+</ul>
+<p>==说明==： 这个配置里面只配置了.js、.vue、图片、字体等几类文件的处理规则，如果需要处理其他文件可以在module.rules里面另行配置。</p>
+<ul>
+<li>具体请看代码注释：</li>
+</ul>
+<p>```<br>var path = require(‘path’)<br>var fs = require(‘fs’)<br>var utils = require(‘./utils’)<br>var config = require(‘../config’)<br>var vueLoaderConfig = require(‘./vue-loader.conf’)</p>
+<p>// 获取绝对路径<br>function resolve (dir) {<br>  return path.join(__dirname, ‘..’, dir)<br>}</p>
+<p>module.exports = {<br>  // webpack入口文件<br>  entry: {<br>    app: ‘./src/main.js’<br>  },<br>  // webpack输出路径和命名规则<br>  output: {<br>    // webpack输出的目标文件夹路径（例如：/dist）<br>    path: config.build.assetsRoot,<br>    // webpack输出bundle文件命名格式<br>    filename: ‘[name].js’,<br>    // webpack编译输出的发布路径（例如’//cdn.xxx.com/app/‘）<br>    publicPath: process.env.NODE_ENV === ‘production’<br>      ? config.build.assetsPublicPath<br>      : config.dev.assetsPublicPath<br>  },<br>  // 模块resolve的规则<br>  resolve: {<br>    extensions: [‘.js’, ‘.vue’, ‘.json’],<br>    // 别名，方便引用模块，例如有了别名之后，<br>    // import Vue from ‘vue/dist/vue.common.js’可以写成 import Vue from ‘vue’<br>    alias: {<br>      ‘vue$’: ‘vue/dist/vue.esm.js’,<br>      ‘@’: resolve(‘src’),<br>    },<br>    symlinks: false<br>  },<br>  // 不同类型模块的处理规则<br>  module: {<br>    rules: [<br>      {// 对src和test文件夹下的.js和.vue文件使用eslint-loader进行代码规范检查<br>        test: /.(js|vue)$/,<br>        loader: ‘eslint-loader’,<br>        enforce: ‘pre’,<br>        include: [resolve(‘src’), resolve(‘test’)],<br>        options: {<br>          formatter: require(‘eslint-friendly-formatter’)<br>        }<br>      },<br>      {// 对所有.vue文件使用vue-loader进行编译<br>        test: /.vue$/,<br>        loader: ‘vue-loader’,<br>        options: vueLoaderConfig<br>      },<br>      {// 对src和test文件夹下的.js文件使用babel-loader将es6+的代码转成es5<br>        test: /.js$/,<br>        loader: ‘babel-loader’,<br>        include: [resolve(‘src’), resolve(‘test’)]<br>      },<br>      {// 对图片资源文件使用url-loader<br>        test: /.(png|jpe?g|gif|svg)(\?.<em>)?$/,<br>        loader: ‘url-loader’,<br>        options: {<br>          // 小于10K的图片转成base64编码的dataURL字符串写到代码中<br>          limit: 10000,<br>          // 其他的图片转移到静态资源文件夹<br>          name: utils.assetsPath(‘img/[name].[hash:7].[ext]’)<br>        }<br>      },<br>      {// 对多媒体资源文件使用url-loader<br>        test: /.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.</em>)?$/,<br>        loader: ‘url-loader’,<br>        options: {<br>          // 小于10K的资源转成base64编码的dataURL字符串写到代码中<br>          limit: 10000,<br>          // 其他的资源转移到静态资源文件夹<br>          name: utils.assetsPath(‘media/[name].[hash:7].[ext]’)<br>        }<br>      },<br>      {// 对字体资源文件使用url-loader<br>        test: /.(woff2?|eot|ttf|otf)(\?.*)?$/,<br>        loader: ‘url-loader’,<br>        options: {<br>          // 小于10K的资源转成base64编码的dataURL字符串写到代码中<br>          limit: 10000,<br>          // 其他的资源转移到静态资源文件夹<br>          name: utils.assetsPath(‘fonts/[name].[hash:7].[ext]’)<br>        }<br>      }<br>    ]<br>  }<br>}</p>
 
       
     </div>
@@ -389,6 +402,22 @@
       
       
 
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/15/Vue-config-01/" rel="next" title="Vue三种环境配置（测试，生产）（自测可用）(教程一)">
+                <i class="fa fa-chevron-left"></i> Vue三种环境配置（测试，生产）（自测可用）(教程一)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
       
 
       
@@ -437,8 +466,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -457,7 +495,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">2</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -491,6 +529,20 @@
 
           <div class="links-of-author motion-element">
             
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/VIVI863628" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:863628979@qq.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-globe"></i>E-Mail</a>
+                </span>
+              
+            
           </div>
 
           
@@ -504,6 +556,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#build-webpack-base-conf-js（开发与生产环境基础配置文件）"><span class="nav-number">1.</span> <span class="nav-text">build/webpack.base.conf.js（开发与生产环境基础配置文件）</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -585,6 +653,9 @@
 
 
 
+  
+  
+
 
 
 
@@ -621,6 +692,16 @@
   
   
     <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
   
 
 
