@@ -272,6 +272,295 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/21/WebSocket/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="VIVI">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/head.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="VIVI">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/21/WebSocket/" itemprop="url">WebSocket在Vue项目上的运用</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-21T15:35:51+08:00">
+                2017-10-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/WebSocket/" itemprop="url" rel="index">
+                    <span itemprop="name">WebSocket</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>let wsUrl = ‘ws://192.168.0.84:8881/service-jcj/websocket’    // 通讯地址</p>
+<p>var wsInfo = new WebSocketMsg(Vue实例, wsUrl)  // 传入vue对象，通讯地址</p>
+<p>wsInfo.createWebSocket()  // 创建通讯</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * Created by admin on 2017/8/19.</div><div class="line"> */</div><div class="line">const WebSocketMsg = function (_self, url) &#123;</div><div class="line">  let obj = &#123;</div><div class="line">    ws: null, </div><div class="line">    lockReconnect: false,   // 避免重复连接</div><div class="line">    createWebSocket () &#123;    // 通讯开启事件</div><div class="line">      try &#123;</div><div class="line">        obj.ws = new WebSocket(url)</div><div class="line">        obj.initEventHandle()</div><div class="line">      &#125; catch (e) &#123;</div><div class="line">        obj.reconnect(url)</div><div class="line">      &#125;</div><div class="line">    &#125;,</div><div class="line">    initEventHandle () &#123;         // 通讯操作事件   开启 消息 关闭 错误</div><div class="line">      obj.ws.onclose = function () &#123;</div><div class="line">        obj.reconnect(url)      // 通讯重连</div><div class="line">        console.log(&apos;通讯关闭&apos;)</div><div class="line">      &#125;</div><div class="line">      obj.ws.onerror = function () &#123;</div><div class="line">        obj.reconnect(url)       // 通讯重连</div><div class="line">        console.log(&apos;通讯错误&apos;)</div><div class="line">      &#125;</div><div class="line">      obj.ws.onopen = function () &#123;</div><div class="line">        // 心跳检测重置</div><div class="line">        obj.heartCheck.reset()      // 心跳检测重置</div><div class="line">        obj.heartCheck.start()      // 心跳检测开启</div><div class="line">        console.log(&apos;通讯开启&apos;)</div><div class="line">      &#125;</div><div class="line">      obj.ws.onmessage = function (event) &#123;</div><div class="line">        // 如果获取到消息，心跳检测重置</div><div class="line">        // 拿到任何消息都说明当前连接是正常的</div><div class="line">        obj.heartCheck.reset()      // 心跳检测重置</div><div class="line">        obj.heartCheck.start()      // 心跳检测开启</div><div class="line">        console.log(event)</div><div class="line">        console.log(&apos;通讯消息&apos;)</div><div class="line">        _self.$store.dispatch(&apos;socketAction&apos;, event)	// 将消息统一传入Vuex中做相应处理</div><div class="line">      &#125;</div><div class="line">    &#125;,</div><div class="line">    reconnect () &#123;</div><div class="line">      if (obj.lockReconnect) &#123;        // 如果为真 结束事件 为假 执行后续事件</div><div class="line">        return</div><div class="line">      &#125;</div><div class="line">      obj.lockReconnect = true</div><div class="line">      // 没连接上会一直重连，设置延迟避免请求过多</div><div class="line">      setTimeout(function () &#123;</div><div class="line">        obj.createWebSocket(url)    //  新开启通讯</div><div class="line">        obj.lockReconnect = false</div><div class="line">      &#125;, 2000)</div><div class="line">    &#125;,</div><div class="line">    heartCheck: &#123;</div><div class="line">      timeout: 60000,   // 60秒</div><div class="line">      timeoutObj: null,</div><div class="line">      serverTimeoutObj: null,</div><div class="line">      reset: function () &#123;</div><div class="line">        clearTimeout(this.timeoutObj)</div><div class="line">        clearTimeout(this.serverTimeoutObj)</div><div class="line">        return this</div><div class="line">      &#125;,</div><div class="line">      start: function () &#123;</div><div class="line">        let that = this</div><div class="line">        that.timeoutObj = setTimeout(function () &#123;</div><div class="line">          // 这里发送一个心跳，后端收到后，返回一个心跳消息，</div><div class="line">          // onmessage拿到返回的心跳就说明连接正常</div><div class="line">          obj.ws.send(&apos;@&apos;)   // 向后端发送消息 如果后端接收  则重置心跳</div><div class="line">          console.log(&apos;后端接收心跳成功&apos;)</div><div class="line">          that.serverTimeoutObj = setTimeout(function () &#123;  // 如果超过一定时间还没重置，说明后端主动断开了</div><div class="line">            obj.ws.close()  // 如果onclose会执行reconnect，我们执行ws.close()就行了.如果直接执行reconnect 会触发onclose导致重连两次</div><div class="line">          &#125;, that.timeout)</div><div class="line">        &#125;, that.timeout)</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  return obj</div><div class="line">&#125;</div><div class="line">export default WebSocketMsg</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/21/PouchDB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="VIVI">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/head.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="VIVI">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/21/PouchDB/" itemprop="url">PouchDB在图片离线存储的应用</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-21T15:26:23+08:00">
+                2017-10-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/PouchDB/" itemprop="url" rel="index">
+                    <span itemprop="name">PouchDB</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>方法：addTodo（DB，pouchId，src对象，bg）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div></pre></td><td class="code"><pre><div class="line">/*</div><div class="line">* 参数</div><div class="line">* db: 已建或未建数据库</div><div class="line">* pouchId: 数据库唯一的主键_id</div><div class="line">* src： 图片img的DOM对象</div><div class="line">* bg： 判断是否是背景图</div><div class="line">* */</div><div class="line"> import $ from &apos;jquery&apos;</div><div class="line"> const addTodo = function (db, ary) &#123;</div><div class="line">    ary.forEach(function (e) &#123;</div><div class="line">        console.log(e)</div><div class="line">        // 查询数据库中是否有该文档 根据主键pouchId查询</div><div class="line">        db.get(e.pouchId).then(function (doc) &#123;   // 查询数据库中该主键_id的文档信息</div><div class="line">            // Handle doc</div><div class="line">            var imgBlob = doc.imgFile  // blob图片对象</div><div class="line">            console.log(imgBlob)</div><div class="line">            // 判断是否存在该图片对象Blob</div><div class="line">            if (imgBlob) &#123;</div><div class="line">              // 传入blob对象 dom对象</div><div class="line">              showImg(imgBlob,e.src,e.bg);</div><div class="line">            &#125; else &#123;</div><div class="line">              getByRequest(db,e.pouchId,e.src);</div><div class="line">            &#125;</div><div class="line">        &#125;).catch(function (err) &#123;</div><div class="line">            console.log(err);</div><div class="line">            console.log(&apos;查询失败，进行创建&apos;)    // 文档查询失败</div><div class="line">            // 新建文档</div><div class="line">            db.put(&#123;</div><div class="line">                _id: e.pouchId</div><div class="line">            &#125;).then(function (response) &#123;</div><div class="line">                // Handle response</div><div class="line">                console.log(&apos;创建成功&apos;)</div><div class="line">            &#125;).catch(function (err) &#123;</div><div class="line">                console.log(err);</div><div class="line">            &#125;);</div><div class="line">        &#125;);</div><div class="line">    &#125;)</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 传入blob对象 显示图片</div><div class="line">function showImg(imgFile, src,bg) &#123;</div><div class="line"></div><div class="line">    console.log(&quot;showImg&quot; + imgFile);</div><div class="line"></div><div class="line">    // Get window.URL object</div><div class="line">    var URL = window.URL || window.webkitURL;</div><div class="line"></div><div class="line">    // Create and revoke ObjectURL</div><div class="line">    // 利用blob对象 创建一个URL对象</div><div class="line">    var imgURL = URL.createObjectURL(imgFile);</div><div class="line"></div><div class="line">    // Set img src to ObjectURL</div><div class="line">    // 获取图片的dom对象 并将URL设置为该对象的SRC</div><div class="line">   // var imgElephant = document.getElementById(src);</div><div class="line">      var imgElephant = $(src)</div><div class="line">    if(!bg)&#123;</div><div class="line">        // imgElephant.setAttribute(&quot;src&quot;, imgURL);</div><div class="line">      imgElephant.attr(&apos;src&apos;, imgURL)</div><div class="line">    &#125;else&#123;</div><div class="line">      imgElephant.css(&apos;background&apos;, &quot;url(&quot;+imgURL+&quot;)&quot;)</div><div class="line">      //  imgElephant.style.background = &quot;url(&quot;+imgURL+&quot;)&quot;;</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    // Revoking ObjectURL</div><div class="line">    // 当图片加载完成后</div><div class="line">    // 使用URL.revokeObjectURL() 方法释放之前创建的URL对象</div><div class="line">    imgElephant.onload = function () &#123;</div><div class="line">        window.URL.revokeObjectURL(this.src);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 当数据库查询主键 无该图片数据时 通过项目自身存储图片blob</div><div class="line">function getByRequest(db,pouchId, src) &#123;</div><div class="line"></div><div class="line">    // Create XHR</div><div class="line">    var xhr = new XMLHttpRequest(), // 创建 XMLHttpRequest 对象   目前请求项目自身</div><div class="line">        blob;</div><div class="line">    xhr.open(&quot;GET&quot;, pouchId, true);   // 在项目中get请求该图片</div><div class="line">    // Set the responseType to blob</div><div class="line">    // 将响应类型设为blob类型</div><div class="line">    xhr.responseType = &quot;blob&quot;;</div><div class="line">    // 响应加载</div><div class="line">    xhr.addEventListener(&quot;load&quot;, function () &#123;</div><div class="line">        // 响应为200 请求完成</div><div class="line">        if (xhr.status === 200) &#123;</div><div class="line">            console.log(&quot;Image retrieved&quot;);</div><div class="line"></div><div class="line">            // Blob as response</div><div class="line">            blob = xhr.response;  // blob对象为响应后的对象</div><div class="line">            console.log(&quot;Blob:&quot; + blob);</div><div class="line">            //  获得blob图片信息  存入pouchDB文档</div><div class="line">            save(db,blob, pouchId);</div><div class="line">            //  从pouchDB查询该文档</div><div class="line">            showImg(blob, src);</div><div class="line">        &#125;</div><div class="line">    &#125;, false);</div><div class="line">    // Send XHR</div><div class="line">    xhr.send();</div><div class="line">&#125;</div><div class="line"></div><div class="line">//根据blob对象为keyPath  更新键值</div><div class="line">function save(db,blob, pouchId) &#123;</div><div class="line">    // 根据主键_id 查询文档 并追加文档imgFile内容 更新版本号_rev</div><div class="line">    db.get(pouchId).then(function(doc) &#123;</div><div class="line">        return db.put(&#123;</div><div class="line">            _id: pouchId,</div><div class="line">            _rev: doc._rev,</div><div class="line">            imgFile: blob</div><div class="line">        &#125;);</div><div class="line">    &#125;).then(function(response) &#123;</div><div class="line">        // Handle response</div><div class="line">        console.log(&apos;图片存储成功&apos;)</div><div class="line">        console.log(response)</div><div class="line">    &#125;).catch(function (err) &#123;</div><div class="line">        console.log(err);</div><div class="line">    &#125;);</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">export default addTodo</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/20/vue-config-two/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -663,7 +952,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -674,7 +963,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -685,7 +974,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
