@@ -40,7 +40,7 @@ jobs:
           node-version: 18
           # cache: pnpm # 或 pnpm / yarn
       - name: Install PNPM
-        uses: npm i -g pnpm
+        run: npm i -g pnpm
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Install dependencies
